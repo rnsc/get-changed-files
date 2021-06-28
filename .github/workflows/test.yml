@@ -103,7 +103,7 @@ jobs:
         uses: ./
         with:
           include: '.*'
-          exclude: '*.js'
+          exclude: '.*\.js'
 
       - name: Print files-filtered
         run: |
