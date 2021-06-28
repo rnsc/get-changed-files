@@ -86,6 +86,8 @@ jobs:
       - id: files
         name: Run the action
         uses: ./
+        with:
+          include: '*'
 
       - name: Print steps context output
         run: |
