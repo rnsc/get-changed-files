@@ -95,3 +95,20 @@ jobs:
           echo 'steps.files.outputs.removed=${{ steps.files.outputs.removed }}'
           echo 'steps.files.outputs.renamed=${{ steps.files.outputs.renamed }}'
           echo 'steps.files.outputs.added_modified=${{ steps.files.outputs.added_modified }}'
+          
+      - id: files-filtered
+        name: Run the action
+        uses: ./
+        with:
+          include: '*'
+          exclude: '*.js'
+
+      - name: Print steps context output
+        run: |
+          echo 'steps.files-filtered.outputs.all=${{ steps.files-filtered.outputs.all }}'
+          echo 'steps.files-filtered.outputs.added=${{ steps.files-filtered.outputs.added }}'
+          echo 'steps.files-filtered.outputs.modified=${{ steps.files-filtered.outputs.modified }}'
+          echo 'steps.files-filtered.outputs.removed=${{ steps.files-filtered.outputs.removed }}'
+          echo 'steps.files-filtered.outputs.renamed=${{ steps.files-filtered.outputs.renamed }}'
+          echo 'steps.files-filtered.outputs.added_modified=${{ steps.files-filtered.outputs.added_modified }}'
+        
