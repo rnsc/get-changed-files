@@ -3517,7 +3517,8 @@ function run() {
             // Create GitHub client with the API token.
             const client = new github_1.GitHub(core.getInput('token', { required: true }));
             const format = core.getInput('format', { required: true });
-            const filter = core.getInput('filter', { required: true }) || '*';
+            const include = core.getInput('include', { required: true }) || '.*';
+            const exclude = core.getInput('exclude', { required: false });
             // Ensure that the format parameter is set properly.
             if (format !== 'space-delimited' && format !== 'csv' && format !== 'json') {
                 core.setFailed(`Format must be one of 'string-delimited', 'csv', or 'json', got '${format}'.`);
@@ -3567,9 +3568,13 @@ function run() {
                 core.setFailed(`The GitHub API for comparing the base and head commits for this ${github_1.context.eventName} event returned ${response.status}, expected 200. ` +
                     "Please submit an issue on this action's GitHub repo.");
             }
-            const regex = new RegExp(`/${filter}\\b`, 'g');
+            const regexInclude = new RegExp(include, 'g');
             // Get the changed files from the response payload.
-            const files = response.data.files.filter(file => file.filename.match(regex));
+            let files = response.data.files.filter(file => regexInclude.test(file.filename));
+            if (exclude) {
+                const regexExclude = new RegExp(exclude, 'g');
+                files = files.filter(file => !regexExclude.test(file.filename));
+            }
             const all = [], added = [], modified = [], removed = [], renamed = [], addedModified = [];
             for (const file of files) {
                 const filename = file.filename;
