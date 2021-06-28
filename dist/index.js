@@ -3573,8 +3573,7 @@ function run() {
             let files = response.data.files.filter(file => regexInclude.test(file.filename));
             if (exclude) {
                 const regexExclude = new RegExp(exclude, 'g');
-                const excludedFiles = files.filter(file => !regexExclude.test(file.filename));
-                files = excludedFiles;
+                files = files.filter(file => !regexExclude.test(file.filename));
             }
             const all = [], added = [], modified = [], removed = [], renamed = [], addedModified = [];
             for (const file of files) {
