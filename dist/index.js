@@ -3517,7 +3517,8 @@ function run() {
             // Create GitHub client with the API token.
             const client = new github_1.GitHub(core.getInput('token', { required: true }));
             const format = core.getInput('format', { required: true });
-            const filter = core.getInput('filter', { required: true }) || '*';
+            const include = core.getInput('include', { required: true }) || '*';
+            const exclude = core.getInput('exclude', { required: false });
             // Ensure that the format parameter is set properly.
             if (format !== 'space-delimited' && format !== 'csv' && format !== 'json') {
                 core.setFailed(`Format must be one of 'string-delimited', 'csv', or 'json', got '${format}'.`);
@@ -3567,9 +3568,14 @@ function run() {
                 core.setFailed(`The GitHub API for comparing the base and head commits for this ${github_1.context.eventName} event returned ${response.status}, expected 200. ` +
                     "Please submit an issue on this action's GitHub repo.");
             }
-            const regex = new RegExp(`/${filter}\\b`, 'g');
+            const regexInclude = new RegExp(`/${include}\\b`, 'g');
             // Get the changed files from the response payload.
-            const files = response.data.files.filter(file => file.filename.match(regex));
+            let files = response.data.files.filter(file => file.filename.match(regexInclude));
+            if (exclude) {
+                const regexExclude = new RegExp(`/${exclude}\\b`, 'g');
+                const excludedFiles = files.filter(file => file.filename.match(regexExclude));
+                files = excludedFiles;
+            }
             const all = [], added = [], modified = [], removed = [], renamed = [], addedModified = [];
             for (const file of files) {
                 const filename = file.filename;
@@ -3655,6 +3661,7 @@ function run() {
     });
 }
 run();
+exports.default = run;
 
 
 /***/ }),
@@ -5870,6 +5877,12 @@ function convertBody(buffer, headers) {
 	// html4
 	if (!res && str) {
 		res = /<meta[\s]+?http-equiv=(['"])content-type\1[\s]+?content=(['"])(.+?)\2/i.exec(str);
+		if (!res) {
+			res = /<meta[\s]+?content=(['"])(.+?)\1[\s]+?http-equiv=(['"])content-type\3/i.exec(str);
+			if (res) {
+				res.pop(); // drop last quote
+			}
+		}
 
 		if (res) {
 			res = /charset=(.*)/i.exec(res.pop());
@@ -6877,7 +6890,7 @@ function fetch(url, opts) {
 				// HTTP fetch step 5.5
 				switch (request.redirect) {
 					case 'error':
-						reject(new FetchError(`redirect mode is set to error: ${request.url}`, 'no-redirect'));
+						reject(new FetchError(`uri requested responds with a redirect, redirect mode is set to error: ${request.url}`, 'no-redirect'));
 						finalize();
 						return;
 					case 'manual':
@@ -6916,7 +6929,8 @@ function fetch(url, opts) {
 							method: request.method,
 							body: request.body,
 							signal: request.signal,
-							timeout: request.timeout
+							timeout: request.timeout,
+							size: request.size
 						};
 
 						// HTTP-redirect fetch step 9
