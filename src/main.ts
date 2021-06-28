@@ -9,7 +9,7 @@ async function run(): Promise<void> {
     // Create GitHub client with the API token.
     const client = new GitHub(core.getInput('token', {required: true}))
     const format = core.getInput('format', {required: true}) as Format
-    const include = core.getInput('include', {required: true}) || '*'
+    const include = core.getInput('include', {required: true}) || '.*'
     const exclude = core.getInput('exclude', {required: false})
 
     // Ensure that the format parameter is set properly.
@@ -77,12 +77,12 @@ async function run(): Promise<void> {
       )
     }
 
-    const regexInclude = new RegExp(`/${include}\\b`, 'g')
+    const regexInclude = new RegExp(include, 'g')
     // Get the changed files from the response payload.
-    let files = response.data.files.filter(file => file.filename.match(regexInclude))
+    let files = response.data.files.filter(file => regexInclude.test(file.filename))
     if (exclude) {
-      const regexExclude = new RegExp(`/${exclude}\\b`, 'g')
-      const excludedFiles = files.filter(file => file.filename.match(regexExclude))
+      const regexExclude = new RegExp(exclude, 'g')
+      const excludedFiles = files.filter(file => regexExclude.test(file.filename))
       files = excludedFiles
     }
 
