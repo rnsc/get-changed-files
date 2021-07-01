@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import {context, GitHub} from '@actions/github'
+import minimatch from 'minimatch'
 
 type Format = 'space-delimited' | 'csv' | 'json'
 type FileStatus = 'added' | 'modified' | 'removed' | 'renamed'
@@ -76,14 +77,13 @@ async function run(): Promise<void> {
       )
     }
 
-    const minimatch = require('minimatch')
     let files = response.data.files
 
     for (const item of globFilter) {
-			core.info(`Going through ${globFilter}: current item: ${item}`)
+      core.info(`Going through ${globFilter}: current item: ${item}`)
       files = files.filter(file => minimatch(file.filename, item))
     }
-		core.info(`${files}`)
+    core.info(`files: ${files}`)
     const all = [] as string[],
       added = [] as string[],
       modified = [] as string[],
