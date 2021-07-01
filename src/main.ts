@@ -1,5 +1,6 @@
 import * as core from '@actions/core'
 import {context, GitHub} from '@actions/github'
+import {glob} from 'glob'
 
 type Format = 'space-delimited' | 'csv' | 'json'
 type FileStatus = 'added' | 'modified' | 'removed' | 'renamed'
@@ -9,8 +10,7 @@ async function run(): Promise<void> {
     // Create GitHub client with the API token.
     const client = new GitHub(core.getInput('token', {required: true}))
     const format = core.getInput('format', {required: true}) as Format
-    const include = core.getInput('include', {required: true}) || '.*'
-    const exclude = core.getInput('exclude', {required: false})
+    const globFilter = core.getMultilineInput('glob-filter', {required: true}) || '*'
 
     // Ensure that the format parameter is set properly.
     if (format !== 'space-delimited' && format !== 'csv' && format !== 'json') {
@@ -77,13 +77,25 @@ async function run(): Promise<void> {
       )
     }
 
-    const regexInclude = new RegExp(include, 'g')
-    // Get the changed files from the response payload.
-    let files = response.data.files.filter(file => regexInclude.test(file.filename))
-    if (exclude) {
-      const regexExclude = new RegExp(exclude, 'g')
-      files = files.filter(file => !regexExclude.test(file.filename))
+    const ignoreArray = [] as string[]
+    let globPatternString = '' as string
+
+    for (const item of globFilter) {
+      if (item.includes('!')) {
+        ignoreArray.push(item)
+      } else {
+        globPatternString += `${item},`
+      }
     }
+    globPatternString = globPatternString.replace(/(,$)/g, '')
+
+    const pattern = `{${globPatternString}}`
+
+    const matches = glob.sync(pattern, {
+      ignore: ignoreArray
+    })
+
+    const files = response.data.files.filter(file => matches.includes(file.filename))
 
     const all = [] as string[],
       added = [] as string[],
