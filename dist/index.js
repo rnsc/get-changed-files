@@ -4578,7 +4578,7 @@ function run() {
                     "Please submit an issue on this action's GitHub repo.");
             }
             const files = response.data.files.filter(file => {
-                let match = false, negatedMatch = true;
+                let match = false, negatedMatch = false;
                 for (const item of globFilter) {
                     const pattern = item;
                     core.info(`Test ${file.filename} against ${pattern}`);
