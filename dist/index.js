@@ -4582,11 +4582,14 @@ function run() {
                 for (const item of globFilter) {
                     const pattern = item;
                     core.info(`Test ${file.filename} against ${pattern}`);
-                    if (!pattern.includes('!')) {
-                        match = match || minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
+                    core.info(`current match value: ${match}`);
+                    if (pattern.includes('!')) {
+                        const test = minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
+                        core.info(`negative pattern check result: ${test}`);
+                        match = match && minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
                     }
                     else {
-                        match = match && minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
+                        match = match || minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
                     }
                     core.info(`match: ${match}`);
                 }
