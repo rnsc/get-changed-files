@@ -4578,7 +4578,7 @@ function run() {
                     "Please submit an issue on this action's GitHub repo.");
             }
             const files = response.data.files.filter(file => {
-                let match = false, negatedMatch = false;
+                let match = false, negatedMatch = true;
                 for (const item of globFilter) {
                     const pattern = item;
                     core.debug(`Test ${file.filename} against ${pattern}`);
@@ -4588,7 +4588,7 @@ function run() {
                     else {
                         negatedMatch = negatedMatch && minimatch_1.default(file.filename, pattern, { matchBase: true });
                     }
-                    core.debug(`${match}`);
+                    core.info(`match: ${match} negatedMatch: ${negatedMatch}`);
                 }
                 return match && negatedMatch;
             });

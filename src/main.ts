@@ -79,7 +79,7 @@ async function run(): Promise<void> {
 
     const files = response.data.files.filter(file => {
       let match = false,
-        negatedMatch = false
+        negatedMatch = true
       for (const item of globFilter) {
         const pattern = item
         core.debug(`Test ${file.filename} against ${pattern}`)
@@ -88,7 +88,7 @@ async function run(): Promise<void> {
         } else {
           negatedMatch = negatedMatch && minimatch(file.filename, pattern, {matchBase: true})
         }
-        core.debug(`${match}`)
+        core.info(`match: ${match} negatedMatch: ${negatedMatch}`)
       }
       return match && negatedMatch
     })
