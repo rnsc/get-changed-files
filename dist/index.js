@@ -4586,7 +4586,7 @@ function run() {
             const files = response.data.files.filter(file => {
                 let matched = true;
                 for (const item of globFilter) {
-                    const pattern = item.replace(/'/g, '');
+                    const pattern = item;
                     core.info(`${pattern}`);
                     matched = matched && minimatch_1.default(file.filename, pattern);
                 }
