@@ -102,7 +102,7 @@ jobs:
         name: Run the action
         uses: ./
         with:
-          glob-filter: >
+          glob-filter: |
             *.js
             *.ts
             *.json
