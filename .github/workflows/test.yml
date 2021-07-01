@@ -104,7 +104,7 @@ jobs:
         with:
           glob-filter: |
             *.yml  
-            !.github*
+            !*workflows*
             *.js
             *.ts
             !*.json
