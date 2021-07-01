@@ -88,7 +88,7 @@ async function run(): Promise<void> {
       for (const item of globFilter) {
         const pattern = item.replace(/'/g, '')
         core.info(`${pattern}`)
-        matched = matched && minimatch(file.filename, pattern, {matchBase: true})
+        matched = matched && minimatch(file.filename, pattern, {debug: true})
       }
       return matched
     })
