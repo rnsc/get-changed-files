@@ -102,8 +102,7 @@ jobs:
         name: Run the action
         uses: ./
         with:
-          glob-filter: |
-            '*.js'
+          glob-filter: '*.js'
 
       - name: Print files-filtered
         run: |
