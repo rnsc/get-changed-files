@@ -4581,7 +4581,7 @@ function run() {
                 let match = false, negatedMatch = true;
                 for (const item of globFilter) {
                     const pattern = item;
-                    core.debug(`Test ${file.filename} against ${pattern}`);
+                    core.info(`Test ${file.filename} against ${pattern}`);
                     if (!pattern.includes('!')) {
                         match = match || minimatch_1.default(file.filename, pattern, { matchBase: true });
                     }

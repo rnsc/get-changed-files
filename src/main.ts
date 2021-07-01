@@ -82,7 +82,7 @@ async function run(): Promise<void> {
         negatedMatch = true
       for (const item of globFilter) {
         const pattern = item
-        core.debug(`Test ${file.filename} against ${pattern}`)
+        core.info(`Test ${file.filename} against ${pattern}`)
         if (!pattern.includes('!')) {
           match = match || minimatch(file.filename, pattern, {matchBase: true})
         } else {
