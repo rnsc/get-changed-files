@@ -79,11 +79,15 @@ async function run(): Promise<void> {
 
     let globPatternString = '' as string
     for (const item of globFilter) {
-      globPatternString += `${item},`
+      globPatternString += `${item.replace(/\\'/g, '')},`
     }
     globPatternString = globPatternString.replace(/(,$)/g, '')
     core.info(`gloPatternString: ${globPatternString}`)
-    const files = response.data.files.filter(file => minimatch(file.filename, globPatternString))
+    const files = response.data.files.filter(file => {
+      if (!minimatch(file.filename, globPatternString, {matchBase: true})) {
+        core.setFailed(`minimatch failed for: ${file.filename}`)
+      }
+    })
 
     core.info(`files filtered:`)
     for (const file of files) {
