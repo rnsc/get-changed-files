@@ -103,9 +103,9 @@ jobs:
         uses: ./
         with:
           glob-filter: |
-            *.js
-            *.ts
-            *.json
+          *.js
+          *.ts
+          *.json
 
       - name: Print files-filtered
         run: |
