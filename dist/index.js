@@ -4578,19 +4578,19 @@ function run() {
                     "Please submit an issue on this action's GitHub repo.");
             }
             const files = response.data.files.filter(file => {
-                let matched = false;
+                let match = false, negatedMatch = false;
                 for (const item of globFilter) {
                     const pattern = item;
                     core.debug(`Test ${file.filename} against ${pattern}`);
                     if (!pattern.includes('!')) {
-                        matched = matched || minimatch_1.default(file.filename, pattern, { matchBase: true });
+                        match = match || minimatch_1.default(file.filename, pattern, { matchBase: true });
                     }
                     else {
-                        matched = matched && minimatch_1.default(file.filename, pattern, { matchBase: true });
+                        negatedMatch = negatedMatch && minimatch_1.default(file.filename, pattern, { matchBase: true });
                     }
-                    core.debug(`${matched}`);
+                    core.debug(`${match}`);
                 }
-                return matched;
+                return match && negatedMatch;
             });
             const all = [], added = [], modified = [], removed = [], renamed = [], addedModified = [];
             for (const file of files) {
