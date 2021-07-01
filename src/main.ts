@@ -1,6 +1,5 @@
 import * as core from '@actions/core'
 import {context, GitHub} from '@actions/github'
-import {glob} from 'glob'
 
 type Format = 'space-delimited' | 'csv' | 'json'
 type FileStatus = 'added' | 'modified' | 'removed' | 'renamed'
@@ -77,25 +76,12 @@ async function run(): Promise<void> {
       )
     }
 
-    const ignoreArray = [] as string[]
-    let globPatternString = '' as string
+    const minimatch = require('minimatch')
+    let files = response.data.files
 
     for (const item of globFilter) {
-      if (item.includes('!')) {
-        ignoreArray.push(item)
-      } else {
-        globPatternString += `${item},`
-      }
+      files = files.filter(file => minimatch(file.filename, item))
     }
-    globPatternString = globPatternString.replace(/(,$)/g, '')
-
-    const pattern = `{${globPatternString}}`
-
-    const matches = glob.sync(pattern, {
-      ignore: ignoreArray
-    })
-
-    const files = response.data.files.filter(file => matches.includes(file.filename))
 
     const all = [] as string[],
       added = [] as string[],
