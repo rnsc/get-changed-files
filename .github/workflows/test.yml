@@ -103,11 +103,12 @@ jobs:
         uses: ./
         with:
           glob-filter: |
+            *.yml  
             !.github*
             *.js
             *.ts
             !*.json
-            *.yml
+            
 
       - name: Print files-filtered
         run: |
