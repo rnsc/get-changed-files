@@ -87,7 +87,7 @@ jobs:
         name: Run the action
         uses: ./
         with:
-          include: '.*'
+          glob-filter: '*'
 
       - name: Print files
         run: |
@@ -102,8 +102,9 @@ jobs:
         name: Run the action
         uses: ./
         with:
-          include: '.*'
-          exclude: '.*\.js'
+          glob-filter: |
+            '*.js'
+            '!*.ts'
 
       - name: Print files-filtered
         run: |
