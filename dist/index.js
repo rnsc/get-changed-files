@@ -4581,19 +4581,15 @@ function run() {
                 let match = false;
                 for (const item of globFilter) {
                     const pattern = item;
-                    core.info(`Test ${file.filename} against ${pattern}`);
-                    core.info(`current match value: ${match}`);
+                    core.debug(`Test ${file.filename} against ${pattern}`);
+                    core.debug(`current match value: ${match}`);
                     if (pattern.includes('!')) {
-                        const negate = minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
-                        core.info(`negative pattern check result: ${negate}`);
                         match = match && minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
                     }
                     else {
-                        const check = minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
-                        core.info(`pattern check result: ${check}`);
                         match = match || minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
                     }
-                    core.info(`match: ${match}`);
+                    core.debug(`match: ${match}`);
                 }
                 return match;
             });
