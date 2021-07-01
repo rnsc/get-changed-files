@@ -77,31 +77,21 @@ async function run(): Promise<void> {
       )
     }
 
-    let globPatternString = '' as string
-    for (const item of globFilter) {
-      globPatternString += `${item.replace(/'/g, '')},`
-    }
-    globPatternString = globPatternString.replace(/(,$)/g, '')
-    core.info(`globPatternString: ${globPatternString}`)
     const files = response.data.files.filter(file => {
       let matched = false
       for (const item of globFilter) {
         const pattern = item
-        core.info(`Test ${file.filename} against ${pattern}`)
+        core.debug(`Test ${file.filename} against ${pattern}`)
         if (!pattern.includes('!')) {
           matched = matched || minimatch(file.filename, pattern, {matchBase: true})
         } else {
           matched = matched && minimatch(file.filename, pattern, {matchBase: true})
         }
-        core.info(`${matched}`)
+        core.debug(`${matched}`)
       }
       return matched
     })
 
-    core.info(`files filtered:`)
-    for (const file of files) {
-      core.info(`${file.filename}`)
-    }
     const all = [] as string[],
       added = [] as string[],
       modified = [] as string[],
@@ -110,6 +100,7 @@ async function run(): Promise<void> {
       addedModified = [] as string[]
     for (const file of files) {
       const filename = file.filename
+      core.debug(`${filename}`)
       // If we're using the 'space-delimited' format and any of the filenames have a space in them,
       // then fail the step.
       if (format === 'space-delimited' && filename.includes(' ')) {
