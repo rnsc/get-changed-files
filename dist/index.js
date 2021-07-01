@@ -4588,7 +4588,7 @@ function run() {
                 for (const item of globFilter) {
                     const pattern = item.replace(/'/g, '');
                     core.info(`${pattern}`);
-                    matched = matched && minimatch_1.default(file.filename, pattern, { debug: true });
+                    matched = matched && minimatch_1.default(file.filename, pattern);
                 }
                 return matched;
             });
