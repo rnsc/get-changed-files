@@ -4584,9 +4584,12 @@ function run() {
             globPatternString = globPatternString.replace(/(,$)/g, '');
             core.info(`gloPatternString: ${globPatternString}`);
             const files = response.data.files.filter(file => {
-                if (!minimatch_1.default(file.filename, globPatternString, { matchBase: true })) {
-                    core.setFailed(`minimatch failed for: ${file.filename}`);
+                let matched = true;
+                for (const item of globFilter) {
+                    core.info(`${item}`);
+                    matched = matched && minimatch_1.default(file.filename, item.replace(/\\'/g, ''), { matchBase: true });
                 }
+                return matched;
             });
             core.info(`files filtered:`);
             for (const file of files) {
