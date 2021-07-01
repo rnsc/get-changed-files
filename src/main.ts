@@ -84,10 +84,12 @@ async function run(): Promise<void> {
         core.info(`Test ${file.filename} against ${pattern}`)
         core.info(`current match value: ${match}`)
         if (pattern.includes('!')) {
-          const test = minimatch(file.filename, pattern, {matchBase: true, dot: true})
-          core.info(`negative pattern check result: ${test}`)
+          const negate = minimatch(file.filename, pattern, {matchBase: true, dot: true})
+          core.info(`negative pattern check result: ${negate}`)
           match = match && minimatch(file.filename, pattern, {matchBase: true, dot: true})
         } else {
+          const check = minimatch(file.filename, pattern, {matchBase: true, dot: true})
+          core.info(`pattern check result: ${check}`)
           match = match || minimatch(file.filename, pattern, {matchBase: true, dot: true})
         }
         core.info(`match: ${match}`)

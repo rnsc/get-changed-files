@@ -4584,11 +4584,13 @@ function run() {
                     core.info(`Test ${file.filename} against ${pattern}`);
                     core.info(`current match value: ${match}`);
                     if (pattern.includes('!')) {
-                        const test = minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
-                        core.info(`negative pattern check result: ${test}`);
+                        const negate = minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
+                        core.info(`negative pattern check result: ${negate}`);
                         match = match && minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
                     }
                     else {
+                        const check = minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
+                        core.info(`pattern check result: ${check}`);
                         match = match || minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
                     }
                     core.info(`match: ${match}`);
