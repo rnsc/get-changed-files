@@ -77,20 +77,18 @@ async function run(): Promise<void> {
       )
     }
 
-    let files = response.data.files
-
-    core.info(`files to process:`)
-    for (const file of files) {
-      core.info(`${file.filename}`)
-    }
     let globPatternString = '' as string
     for (const item of globFilter) {
       globPatternString += `${item},`
     }
     globPatternString = globPatternString.replace(/(,$)/g, '')
     core.info(`gloPatternString: ${globPatternString}`)
-    files = files.filter(file => minimatch(file.filename, globPatternString))
-    core.info(`files: ${files}`)
+    const files = response.data.files.filter(file => minimatch(file.filename, globPatternString))
+
+    core.info(`files filtered:`)
+    for (const file of files) {
+      core.info(`${file.filename}`)
+    }
     const all = [] as string[],
       added = [] as string[],
       modified = [] as string[],

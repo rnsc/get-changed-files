@@ -4577,19 +4577,17 @@ function run() {
                 core.setFailed(`The GitHub API for comparing the base and head commits for this ${github_1.context.eventName} event returned ${response.status}, expected 200. ` +
                     "Please submit an issue on this action's GitHub repo.");
             }
-            let files = response.data.files;
-            core.info(`files to process:`);
-            for (const file of files) {
-                core.info(`${file.filename}`);
-            }
-            let globPatternString = "";
+            let globPatternString = '';
             for (const item of globFilter) {
                 globPatternString += `${item},`;
             }
             globPatternString = globPatternString.replace(/(,$)/g, '');
             core.info(`gloPatternString: ${globPatternString}`);
-            files = files.filter(file => minimatch_1.default(file.filename, globPatternString));
-            core.info(`files: ${files}`);
+            const files = response.data.files.filter(file => minimatch_1.default(file.filename, globPatternString));
+            core.info(`files filtered:`);
+            for (const file of files) {
+                core.info(`${file.filename}`);
+            }
             const all = [], added = [], modified = [], removed = [], renamed = [], addedModified = [];
             for (const file of files) {
                 const filename = file.filename;
