@@ -105,6 +105,7 @@ jobs:
           glob-filter: |
             '*.js'
             '!*.ts'
+            '*.json'
 
       - name: Print files-filtered
         run: |
