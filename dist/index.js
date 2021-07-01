@@ -4580,12 +4580,15 @@ function run() {
             let files = response.data.files;
             core.info(`files to process:`);
             for (const file of files) {
-                core.info(`${file}`);
+                core.info(`${file.filename}`);
             }
+            let globPatternString = "";
             for (const item of globFilter) {
-                core.info(`Going through ${globFilter}: current item: ${item}`);
-                files = files.filter(file => minimatch_1.default(file.filename, item));
+                globPatternString += `${item},`;
             }
+            globPatternString = globPatternString.replace(/(,$)/g, '');
+            core.info(`gloPatternString: ${globPatternString}`);
+            files = files.filter(file => minimatch_1.default(file.filename, globPatternString));
             core.info(`files: ${files}`);
             const all = [], added = [], modified = [], removed = [], renamed = [], addedModified = [];
             for (const file of files) {
