@@ -84,13 +84,13 @@ async function run(): Promise<void> {
         const pattern = item
         core.info(`Test ${file.filename} against ${pattern}`)
         if (!pattern.includes('!')) {
-          match = match || minimatch(file.filename, pattern, {matchBase: true})
+          match = match || minimatch(file.filename, pattern, {matchBase: true, dot: true})
         } else {
-          negatedMatch = negatedMatch && minimatch(file.filename, pattern, {matchBase: true})
+          negatedMatch = negatedMatch && minimatch(file.filename, pattern, {matchBase: true, dot: true})
         }
         core.info(`match: ${match} negatedMatch: ${negatedMatch}`)
       }
-      return match && negatedMatch
+      return match || negatedMatch
     })
 
     const all = [] as string[],

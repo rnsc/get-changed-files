@@ -4583,14 +4583,14 @@ function run() {
                     const pattern = item;
                     core.info(`Test ${file.filename} against ${pattern}`);
                     if (!pattern.includes('!')) {
-                        match = match || minimatch_1.default(file.filename, pattern, { matchBase: true });
+                        match = match || minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
                     }
                     else {
-                        negatedMatch = negatedMatch && minimatch_1.default(file.filename, pattern, { matchBase: true });
+                        negatedMatch = negatedMatch && minimatch_1.default(file.filename, pattern, { matchBase: true, dot: true });
                     }
                     core.info(`match: ${match} negatedMatch: ${negatedMatch}`);
                 }
-                return match && negatedMatch;
+                return match || negatedMatch;
             });
             const all = [], added = [], modified = [], removed = [], renamed = [], addedModified = [];
             for (const file of files) {
