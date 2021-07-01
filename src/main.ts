@@ -84,7 +84,7 @@ async function run(): Promise<void> {
     globPatternString = globPatternString.replace(/(,$)/g, '')
     core.info(`globPatternString: ${globPatternString}`)
     const files = response.data.files.filter(file => {
-      let matched = true
+      let matched = false
       for (const item of globFilter) {
         const pattern = item
         core.info(`Test ${file.filename} against ${pattern}`)
