@@ -4579,14 +4579,14 @@ function run() {
             }
             let globPatternString = '';
             for (const item of globFilter) {
-                globPatternString += `${item.replace(/\\'/g, '')},`;
+                globPatternString += `${item.replace(/'/g, '')},`;
             }
             globPatternString = globPatternString.replace(/(,$)/g, '');
-            core.info(`gloPatternString: ${globPatternString}`);
+            core.info(`globPatternString: ${globPatternString}`);
             const files = response.data.files.filter(file => {
                 let matched = true;
                 for (const item of globFilter) {
-                    const pattern = item.replace(/\\'/g, '');
+                    const pattern = item.replace(/'/g, '');
                     core.info(`${pattern}`);
                     matched = matched && minimatch_1.default(file.filename, pattern, { matchBase: true });
                 }
