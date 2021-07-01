@@ -107,6 +107,7 @@ jobs:
             !.github/*/*.yml
             *.js
             *.ts
+            packages*
             !*.json
             
 
