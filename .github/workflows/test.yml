@@ -103,8 +103,8 @@ jobs:
         uses: ./
         with:
           glob-filter: |
-            !.github/*/*.yml
             *.yml
+            !.github/*/*.yml
             *.js
             *.ts
             package*
