@@ -79,6 +79,11 @@ async function run(): Promise<void> {
 
     let files = response.data.files
 
+    core.info(`files to process:`)
+    for (const file of files) {
+      core.info(`${file}`)
+    }
+
     for (const item of globFilter) {
       core.info(`Going through ${globFilter}: current item: ${item}`)
       files = files.filter(file => minimatch(file.filename, item))

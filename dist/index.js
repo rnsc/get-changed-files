@@ -4578,6 +4578,10 @@ function run() {
                     "Please submit an issue on this action's GitHub repo.");
             }
             let files = response.data.files;
+            core.info(`files to process:`);
+            for (const file of files) {
+                core.info(`${file}`);
+            }
             for (const item of globFilter) {
                 core.info(`Going through ${globFilter}: current item: ${item}`);
                 files = files.filter(file => minimatch_1.default(file.filename, item));
