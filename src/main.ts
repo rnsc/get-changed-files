@@ -124,6 +124,11 @@ async function run(): Promise<void> {
           break
         case 'renamed':
           renamed.push(filename)
+          if (file.patch) {
+            // modified renamed files include a patch field
+            modified.push(filename)
+            addedModified.push(filename)
+          }
           break
         default:
           core.setFailed(

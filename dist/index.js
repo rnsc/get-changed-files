@@ -4617,6 +4617,10 @@ function run() {
                         break;
                     case 'renamed':
                         renamed.push(filename);
+                        if (file.patch) { // modified renamed files include a patch field
+                            modified.push(filename);
+                            addedModified.push(filename);
+                        }
                         break;
                     default:
                         core.setFailed(`One of your files includes an unsupported file status '${file.status}', expected 'added', 'modified', 'removed', or 'renamed'.`);
