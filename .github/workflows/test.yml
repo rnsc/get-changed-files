@@ -96,6 +96,7 @@ jobs:
 
       - id: files-filtered
         name: Run the action with filtering
+        uses: ./
         with:
           filter: |
             *.yml
