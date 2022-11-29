@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - releases/*
 
 jobs:
   debug:
@@ -83,6 +82,7 @@ jobs:
         uses: actions/checkout@v2
 
       - id: files
+        uses: ./
         name: Run the action without filtering
 
       - name: Print files
