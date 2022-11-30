@@ -4909,7 +4909,7 @@ function run() {
                 }
                 return match;
             });
-            const all = [], added = [], modified = [], removed = [], renamed = [], addedModified = [];
+            const all = [], added = [], modified = [], removed = [], renamed = [], addedModified = [], addedModifiedRenamed = [];
             for (const file of files) {
                 const filename = file.filename;
                 // If we're using the 'space-delimited' format and any of the filenames have a space in them,
@@ -4923,16 +4923,19 @@ function run() {
                     case 'added':
                         added.push(filename);
                         addedModified.push(filename);
+                        addedModifiedRenamed.push(filename);
                         break;
                     case 'modified':
                         modified.push(filename);
                         addedModified.push(filename);
+                        addedModifiedRenamed.push(filename);
                         break;
                     case 'removed':
                         removed.push(filename);
                         break;
                     case 'renamed':
                         renamed.push(filename);
+                        addedModifiedRenamed.push(filename);
                         if (file.patch) {
                             // modified renamed files include a patch field
                             modified.push(filename);
@@ -4944,7 +4947,7 @@ function run() {
                 }
             }
             // Format the arrays of changed files.
-            let allFormatted, addedFormatted, modifiedFormatted, removedFormatted, renamedFormatted, addedModifiedFormatted;
+            let allFormatted, addedFormatted, modifiedFormatted, removedFormatted, renamedFormatted, addedModifiedFormatted, addedModifiedRenamedFormatted;
             switch (format) {
                 case 'space-delimited':
                     // If any of the filenames have a space in them, then fail the step.
@@ -4958,6 +4961,7 @@ function run() {
                     removedFormatted = removed.join(' ');
                     renamedFormatted = renamed.join(' ');
                     addedModifiedFormatted = addedModified.join(' ');
+                    addedModifiedRenamedFormatted = addedModifiedRenamed.join(' ');
                     break;
                 case 'csv':
                     allFormatted = all.join(',');
@@ -4966,6 +4970,7 @@ function run() {
                     removedFormatted = removed.join(',');
                     renamedFormatted = renamed.join(',');
                     addedModifiedFormatted = addedModified.join(',');
+                    addedModifiedRenamedFormatted = addedModifiedRenamed.join(',');
                     break;
                 case 'json':
                     allFormatted = JSON.stringify(all);
@@ -4974,6 +4979,7 @@ function run() {
                     removedFormatted = JSON.stringify(removed);
                     renamedFormatted = JSON.stringify(renamed);
                     addedModifiedFormatted = JSON.stringify(addedModified);
+                    addedModifiedRenamedFormatted = JSON.stringify(addedModifiedRenamed);
                     break;
             }
             // Log the output values.
@@ -4983,6 +4989,7 @@ function run() {
             core.info(`Removed: ${removedFormatted}`);
             core.info(`Renamed: ${renamedFormatted}`);
             core.info(`Added or modified: ${addedModifiedFormatted}`);
+            core.info(`Added, modified or renamed: ${addedModifiedRenamedFormatted}`);
             // Set step output context.
             core.setOutput('all', allFormatted);
             core.setOutput('added', addedFormatted);
@@ -4990,6 +4997,7 @@ function run() {
             core.setOutput('removed', removedFormatted);
             core.setOutput('renamed', renamedFormatted);
             core.setOutput('added_modified', addedModifiedFormatted);
+            core.setOutput('added_modified_renamed', addedModifiedRenamedFormatted);
             // For backwards-compatibility
             core.setOutput('deleted', removedFormatted);
         }

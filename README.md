@@ -6,10 +6,15 @@
 Get all changed/modified files in a pull request (`pull_request` or `pull_request_target`) or push's commits.
 You can choose to get all changed files, only added files, only modified files, only removed files, only renamed files, or all added and modified files.
 These outputs are available via the `steps` output context.
-The `steps` output context exposes the output names `all`, `added`, `modified`, `removed`, `renamed`, and `added_modified`.
+The `steps` output context exposes the output names `all`, `added`, `modified`, `removed`, `renamed`, and `added_modified` and `added_modified_renamed`.
 Renamed files that are also modified are included in `renamed`, `modified` and `added_modified`.
 
-This project is a fork of <https://github.com/jitterbit/get-changed-files>, which supports `pull_request_target`, allow to filter files using regular expressions, removes the ahead check and considers renamed modified files as modified.
+This project is a fork of <https://github.com/jitterbit/get-changed-files>, which:
+- Supports `pull_request_target`
+- Allows to filter files using regular expressions
+- Removes the ahead check
+- Considers renamed modified files as modified
+- Adds `added_modified_renamed` that includes renamed non-modified files and all files in `added_modified`
 
 - [Usage](#usage)
   - [Filtering](#filtering)

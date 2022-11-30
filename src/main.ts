@@ -98,7 +98,8 @@ async function run(): Promise<void> {
       modified = [] as string[],
       removed = [] as string[],
       renamed = [] as string[],
-      addedModified = [] as string[]
+      addedModified = [] as string[],
+      addedModifiedRenamed = [] as string[]
     for (const file of files) {
       const filename = file.filename
       // If we're using the 'space-delimited' format and any of the filenames have a space in them,
@@ -114,16 +115,19 @@ async function run(): Promise<void> {
         case 'added':
           added.push(filename)
           addedModified.push(filename)
+          addedModifiedRenamed.push(filename)
           break
         case 'modified':
           modified.push(filename)
           addedModified.push(filename)
+          addedModifiedRenamed.push(filename)
           break
         case 'removed':
           removed.push(filename)
           break
         case 'renamed':
           renamed.push(filename)
+          addedModifiedRenamed.push(filename)
           if (file.patch) {
             // modified renamed files include a patch field
             modified.push(filename)
@@ -143,7 +147,8 @@ async function run(): Promise<void> {
       modifiedFormatted: string,
       removedFormatted: string,
       renamedFormatted: string,
-      addedModifiedFormatted: string
+      addedModifiedFormatted: string,
+      addedModifiedRenamedFormatted: string
     switch (format) {
       case 'space-delimited':
         // If any of the filenames have a space in them, then fail the step.
@@ -159,6 +164,7 @@ async function run(): Promise<void> {
         removedFormatted = removed.join(' ')
         renamedFormatted = renamed.join(' ')
         addedModifiedFormatted = addedModified.join(' ')
+        addedModifiedRenamedFormatted = addedModifiedRenamed.join(' ')
         break
       case 'csv':
         allFormatted = all.join(',')
@@ -167,6 +173,7 @@ async function run(): Promise<void> {
         removedFormatted = removed.join(',')
         renamedFormatted = renamed.join(',')
         addedModifiedFormatted = addedModified.join(',')
+        addedModifiedRenamedFormatted = addedModifiedRenamed.join(',')
         break
       case 'json':
         allFormatted = JSON.stringify(all)
@@ -175,6 +182,7 @@ async function run(): Promise<void> {
         removedFormatted = JSON.stringify(removed)
         renamedFormatted = JSON.stringify(renamed)
         addedModifiedFormatted = JSON.stringify(addedModified)
+        addedModifiedRenamedFormatted = JSON.stringify(addedModifiedRenamed)
         break
     }
 
@@ -185,6 +193,7 @@ async function run(): Promise<void> {
     core.info(`Removed: ${removedFormatted}`)
     core.info(`Renamed: ${renamedFormatted}`)
     core.info(`Added or modified: ${addedModifiedFormatted}`)
+    core.info(`Added, modified or renamed: ${addedModifiedRenamedFormatted}`)
 
     // Set step output context.
     core.setOutput('all', allFormatted)
@@ -193,6 +202,7 @@ async function run(): Promise<void> {
     core.setOutput('removed', removedFormatted)
     core.setOutput('renamed', renamedFormatted)
     core.setOutput('added_modified', addedModifiedFormatted)
+    core.setOutput('added_modified_renamed', addedModifiedRenamedFormatted)
 
     // For backwards-compatibility
     core.setOutput('deleted', removedFormatted)
