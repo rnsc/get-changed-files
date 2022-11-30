@@ -32,7 +32,7 @@ This project is a fork of <https://github.com/jitterbit/get-changed-files>, whic
 See [action.yml](action.yml)
 
 ```yaml
-- uses: Ana06/get-changed-files@v2.1.0
+- uses: Ana06/get-changed-files@v2.2.0
   with:
     # Format of the steps output context.
     # Can be 'space-delimited', 'csv', or 'json'.
@@ -58,7 +58,7 @@ Consider using one of the other formats if that's the case.
 
 ```yaml
 - id: files
-  uses: Ana06/get-changed-files@v2.1.0
+  uses: Ana06/get-changed-files@v2.2.0
 - run: |
     for changed_file in ${{ steps.files.outputs.all }}; do
       echo "Do something with this ${changed_file}."
@@ -72,7 +72,7 @@ Consider using one of the other formats if that's the case.
 
 ```yaml
 - id: files
-  uses: Ana06/get-changed-files@v2.1.0
+  uses: Ana06/get-changed-files@v2.2.0
   with:
     filter: '*.php'
 - run: |
@@ -88,7 +88,7 @@ Therefore, including all YML files first and excluding the YML files of your `.g
 If those two globs were inverted, you **would** include all the YML files, with the ones in your `.github/*/` directories.
 
 ```yaml
-- uses: Ana06/get-changed-files@v2.1.0
+- uses: Ana06/get-changed-files@v2.2.0
   with:
     filter: |
       *.yml
@@ -99,7 +99,7 @@ If those two globs were inverted, you **would** include all the YML files, with 
 
 ```yaml
 - id: files
-  uses: Ana06/get-changed-files@v2.1.0
+  uses: Ana06/get-changed-files@v2.2.0
   with:
     format: 'csv'
     filter: '*'
@@ -114,7 +114,7 @@ If those two globs were inverted, you **would** include all the YML files, with 
 
 ```yaml
 - id: files
-  uses: Ana06/get-changed-files@v2.1.0
+  uses: Ana06/get-changed-files@v2.2.0
   with:
     format: 'json'
     filter: '*'
