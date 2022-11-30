@@ -9,12 +9,15 @@ These outputs are available via the `steps` output context.
 The `steps` output context exposes the output names `all`, `added`, `modified`, `removed`, `renamed`, and `added_modified` and `added_modified_renamed`.
 Renamed files that are also modified are included in `renamed`, `modified` and `added_modified`.
 
-This project is a fork of <https://github.com/jitterbit/get-changed-files>, which:
+This project is a fork of [jitterbit/get-changed-files](https://github.com/jitterbit/get-changed-files), which:
 - Supports `pull_request_target`
 - Allows to filter files using regular expressions
 - Removes the ahead check
 - Considers renamed modified files as modified
 - Adds `added_modified_renamed` that includes renamed non-modified files and all files in `added_modified`
+- Removes node12 deprecation warnings
+
+---
 
 - [Usage](#usage)
   - [Filtering](#filtering)
